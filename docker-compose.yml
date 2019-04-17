@@ -1,3 +1,9 @@
+# PRODUCTION SETUP
+# CONNECTOR is deployed using the latest container image in
+# docker hub (https://cloud.docker.com/u/encresearch/repository/docker/encresearch/mqtt-connector).
+# If a new :latest image is pushed, watchtower will automatically shutdown the container currently
+# running, update it and re-deploy it.
+
 version: '3.1'
 
 volumes:
@@ -19,7 +25,7 @@ services:
       - ./etc/grafana.conf
     restart: unless-stopped
 
-  # DATA ACQUISITION SERVICE
+  # DATA GATHERING API SERVICE
   connector:
     container_name: connector
     image: encresearch/mqtt-connector:latest
@@ -38,7 +44,7 @@ services:
       - influx_data:/var/lib/influxdb
     restart: unless-stopped
 
-  # AUTOMATIC UPDATE OF BASE DOCKER IMAGES SERVICE 
+  # AUTOMATIC CONTAINER UPDATING SERVICE
   watchtower: # checks for changes in any of the installed images (on the latest tag)
     image: v2tec/watchtower
     volumes:
