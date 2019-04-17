@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  # DATA VISUALIZATION SERVICE
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - 80:3000
+    links:
+      - influxdb
+    env_file:
+      - ./etc/grafana.conf
+    restart: unless-stopped
+
+  # DATA ACQUISITION SERVICE
+  connector:
+    container_name: connector
+    image: encresearch/mqtt-connector:latest
+    links:
+      - influxdb
+    restart: unless-stopped
+
+  # DATABASE SERVICE
+  influxdb:
+    image: influxdb
+    container_name: influxdb
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
+    restart: unless-stopped

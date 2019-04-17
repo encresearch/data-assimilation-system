@@ -1,0 +1,7 @@
+*.pyc
+*.csv
+__pycache__/
+.pytest_cache/
+.vscode/
+.cache
+.diff

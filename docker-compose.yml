@@ -1,0 +1,47 @@
+version: '3.1'
+
+volumes:
+    grafana_data: {}
+    influx_data: {}
+    
+services:
+  # DATA VISUALIZATION SERVICE
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - 80:3000
+    volumes:
+      # Makes sure data is stored in host only if 
+      # postgres is still not configured in the grafana.env file
+      - grafana_data:/var/lib/grafana
+    env_file:
+      - ./etc/grafana.conf
+    restart: unless-stopped
+
+  # DATA ACQUISITION SERVICE
+  connector:
+    container_name: connector
+    image: encresearch/mqtt-connector:latest
+    restart: unless-stopped
+
+  # DATABASE SERVICE     
+  influxdb:
+    image: influxdb
+    container_name: influxdb
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
+    volumes:
+      # Data persistency
+      - influx_data:/var/lib/influxdb
+    restart: unless-stopped
+
+  # AUTOMATIC UPDATE OF BASE DOCKER IMAGES SERVICE 
+  watchtower: # checks for changes in any of the installed images (on the latest tag)
+    image: v2tec/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # mounts docker socket to interact with Docker's API
+    command: --interval 300 # Checks for changes every 5 minutes
+    restart: unless-stopped
