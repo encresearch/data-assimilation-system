@@ -16,7 +16,7 @@ services:
   # DATA ACQUISITION SERVICE
   connector:
     container_name: connector
-    image: encresearch/mqtt-connector:latest
+    image: encresearch/connector:latest
     links:
       - influxdb
     restart: unless-stopped

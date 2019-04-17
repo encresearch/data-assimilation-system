@@ -1,7 +1,7 @@
 ![ADS1115 Wiring Diagram](./docs/img/grafana.png)
 # Data Assimilation: Sensor Data Acquisition, Visualization, Analysis and Monitoring Platform
 
-This repository contains the docker-compose and configuration files for the deployment of the Data Acquisition, Visualization and Monitoring Platform. It makes use of our [MQTT Connector container](https://github.com/encresearch/mqtt-connector), in charge of receiving and storing the sensors' data into an [InfluxDB](https://www.influxdata.com/). Additionally, [Grafana](https://grafana.com/) is served as a web application for both data visualization and monitoring. Upcoming services: ```calculator```, ```TEC data receiver```, and ```data fusion```.
+This repository contains the docker-compose and configuration files for the deployment of the Data Acquisition, Visualization and Monitoring Platform. It makes use of our [MQTT Connector container](https://github.com/encresearch/connector), in charge of receiving and storing the sensors' data into an [InfluxDB](https://www.influxdata.com/). Additionally, [Grafana](https://grafana.com/) is served as a web application for both data visualization and monitoring. Upcoming services: ```calculator```, ```TEC data receiver```, and ```data fusion```.
 
 ## Dependencies and Setup
 ### Docker
@@ -9,7 +9,7 @@ Install [Docker](https://docs.docker.com/install/) and [Docker-Compose](https://
 
 ## Install and Run Locally
 1. Clone the repo.
-    ```git clone https://github.com/encresearch/mqtt-connector.git```
+    ```git clone https://github.com/encresearch/data-assimilation-system.git```
 
 2. Build images and run containers.
     **prod**
@@ -19,7 +19,7 @@ Install [Docker](https://docs.docker.com/install/) and [Docker-Compose](https://
     **Dev**
     The ```docker-compose.dev.yml``` file builds the docker image using the files on your local machine and not pulled from our docker hub (our current production container). That way, all your local changes will take place when building the container.
     ```docker-compose -f docker-compose.dev.yml up -d```
-    This command will spin up both the ```mqtt-connector``` container and an ```influxdb``` container.
+    This command will spin up both the ```connector``` container, ```grafana```,  and an ```influxdb``` container.
 
     To stop and remove containers, networks and images created by up (external volumes won't be removed).
     ```docker-compose -f docker-compose.dev.yml down```

@@ -28,7 +28,7 @@ services:
   # DATA GATHERING API SERVICE
   connector:
     container_name: connector
-    image: encresearch/mqtt-connector:latest
+    image: encresearch/connector:latest
     restart: unless-stopped
 
   # DATABASE SERVICE     
