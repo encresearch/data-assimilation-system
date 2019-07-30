@@ -18,11 +18,11 @@ services:
     ports:
       - 80:3000
     volumes:
-      # Makes sure data is stored in host only if 
-      # postgres is still not configured in the grafana.env file
+      # TODO Makes sure data is stored in host only if 
+      # TODO postgres is still not configured in the grafana.env file
       - grafana_data:/var/lib/grafana
     env_file:
-      - ./etc/grafana.conf
+      - ./grafana/grafana.conf
     restart: unless-stopped
 
   # DATA GATHERING API SERVICE

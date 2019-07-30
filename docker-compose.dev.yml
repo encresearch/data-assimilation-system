@@ -10,7 +10,7 @@ services:
     links:
       - influxdb
     env_file:
-      - ./etc/grafana.conf
+      - ./grafana/grafana.conf
     restart: unless-stopped
 
   # DATA ACQUISITION SERVICE
