@@ -29,6 +29,8 @@ services:
   connector:
     container_name: connector
     image: encresearch/connector:latest
+    environment:
+      - DB_HOST=influxdb
     restart: unless-stopped
 
   # DATABASE SERVICE     
