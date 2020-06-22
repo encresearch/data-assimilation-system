@@ -15,7 +15,8 @@ services:
   grafana:
     container_name: grafana
     image: grafana/grafana
-    EXPOSE: 3000
+    expose:
+        - "3000"
     volumes:
       # TODO Makes sure data is stored in host only if 
       # TODO postgres is still not configured in the grafana.env file
