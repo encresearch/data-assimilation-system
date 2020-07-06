@@ -1,0 +1,69 @@
+# DEV SETUP
+# Connector is created directly from docker file and
+# the app/ volume is mounted inside the container for debugging
+version: '3.6'
+
+volumes:
+  influx_data: {}
+  grafana_data: {}
+
+services:
+
+  influxdb:
+    image: influxdb:1.7
+    container_name: influxdb
+    expose:
+      - "8083"
+      - "8086"
+      - "8090"
+    volumes:
+      - influx_data:/var/lib/influxdb
+    restart: unless-stopped
+
+  # NGINX REVERSE PROXY
+  nginx:
+    build:
+      context: ./data-assimilation-system/nginx/
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - grafana
+    restart: unless-stopped
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:7.0.5
+    expose:
+      - "3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+
+  connector:
+    container_name: connector
+    build:
+      context: ./connector
+      dockerfile: Dockerfile
+      target: development
+    stdin_open: true
+    tty: true
+    links:
+      - influxdb
+    volumes:
+      - ./connector/connector:/opt/connector
+    restart: unless-stopped
+
+  calculator:
+    container_name: calculator
+    build:
+      context: ./calculator
+      dockerfile: Dockerfile
+      target: development
+    stdin_open: true
+    tty: true
+    links:
+      - influxdb
+    volumes:
+      - ./calculator/calculator:/opt/calculator
+    restart: unless-stopped

@@ -44,6 +44,14 @@ services:
       - DB_HOST=influxdb
     restart: unless-stopped
 
+  # DATA GATHERING API SERVICE
+  calculator:
+    container_name: calculator
+    image: encresearch/calculator:latest
+    environment:
+      - DB_HOST=influxdb
+    restart: unless-stopped
+
   # DATABASE SERVICE     
   influxdb:
     image: influxdb
