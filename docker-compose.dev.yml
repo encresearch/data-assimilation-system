@@ -22,6 +22,7 @@ services:
 
   # NGINX REVERSE PROXY
   nginx:
+    container_name: nginx
     build:
       context: ./data-assimilation-system/nginx/
       dockerfile: Dockerfile
@@ -66,4 +67,18 @@ services:
       - influxdb
     volumes:
       - ./calculator/calculator:/opt/calculator
+    restart: unless-stopped
+
+  inspector:
+    container_name: inspector
+    build:
+      context: ./inspector
+      dockerfile: Dockerfile
+      target: development
+    stdin_open: true
+    tty: true
+    links:
+      - influxdb
+    volumes:
+      - ./inspector/inspector:/opt/inspector
     restart: unless-stopped
