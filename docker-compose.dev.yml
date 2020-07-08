@@ -6,6 +6,7 @@ version: '3.6'
 volumes:
   influx_data: {}
   grafana_data: {}
+  postgres_data: {}
 
 services:
 
@@ -28,6 +29,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 80:80
+      - 5000:5000
     depends_on:
       - grafana
     restart: unless-stopped
@@ -81,4 +83,26 @@ services:
       - influxdb
     volumes:
       - ./inspector/inspector:/opt/inspector
+    restart: unless-stopped
+
+  subscriber:
+    container_name: subscriber
+    build:
+      context: ./subscriber
+      dockerfile: Dockerfile
+      target: development
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./subscriber/subscriber:/opt/subscriber
+    restart: unless-stopped
+
+  postgres:
+    container_name: postgres
+    image: postgres:12.2-alpine
+    expose:
+      - "5432"
+    environment:
+      - POSTGRES_DB=enc_earthquake_email_list
+      - POSTGRES_PASSWORD=mysecretpassword
     restart: unless-stopped
